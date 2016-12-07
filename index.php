@@ -23,10 +23,8 @@
   </head>
 
   <body>
-
-      <?php include ("navbar.php"); ?>
       <!-- Statische Navbar -->
-      <!-- <nav class="navbar navbar-default navbar-static-top">
+      <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -47,7 +45,7 @@
                   <li><a href="#">Execution Time</a></li>
                   <li role="separator" class="divider"></li>
                   <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
-                  <!-- <li><a href="#">Data Size</a></li>
+                  <li><a href="#">Data Size</a></li>
                   <li><a href="#">Price</a></li>
                 </ul>
               </li>
@@ -57,9 +55,9 @@
               <li><a href="../navbar/">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
-        <!-- </div>
-      </nav> --> -->
- -->
+        </div>
+      </nav>
+
 
       <div class="container">
 
