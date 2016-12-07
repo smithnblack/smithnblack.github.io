@@ -22,8 +22,59 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Hello, world!</h1>
-    <button class="btn btn-success btn-sm">lol<button>
+      <!-- Statische Navbar -->
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Navigation ein-/ausblenden</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Projekt-Titel</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Start</a></li>
+              <li><a href="#ueber">Über</a></li>
+              <li><a href="#kontakt">Kontakt</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown-Menü <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Aktion</a></li>
+                  <li><a href="#">Andere Aktion</a></li>
+                  <li><a href="#">Irgendwas anderes</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li class="dropdown-header">Nav-Überschrift</li>
+                  <li><a href="#">Abgetrennter Link</a></li>
+                  <li><a href="#">Noch ein abgetrennter Link</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="../navbar/">Standard</a></li>
+              <li class="active"><a href="./">Oben statisch <span class="sr-only">(aktuell)</span></a></li>
+              <li><a href="../navbar-fixed-top/">Oben fixiert</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+
+
+      <div class="container">
+
+        <!-- Hauptkomponente für eine primäre Marketing-Botschaft oder einen Aufruf zu einer Aktion -->
+        <div class="jumbotron">
+          <h1>Navbar-Beispiel</h1>
+          <p>Dieses Beispiel ist eine schnelle Übung, um zu zeigen, wie die Standard-Navbar, die statische und die oben fixierte Navbar funktionieren. Es enthält responsives CSS und HTML, passt sich also der Breite deines Bildschirms oder Browser-Fensters an.</p>
+          <p>Um den Unterschied zwischen statischen und oben fixierten Navbars zu sehen, scrolle einfach etwas nach unten und vergleiche das Ergebnis.</p>
+          <p>
+            <a class="btn btn-lg btn-primary" href="../../komponenten/#navbar" role="button">Sieh dir die Dokumentation für Navbars an &raquo;</a>
+          </p>
+        </div>
+
+      </div> <!-- /container -->
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
