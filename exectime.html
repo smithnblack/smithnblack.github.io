@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Benchmark Library</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+    <link rel="stylesheet" href="./css/main.css"/>
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+      <!-- Statische Navbar -->
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Navigation ein-/ausblenden</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand logoText" href="./index.html">Benchmark Library</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Start</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmarks <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="./hardware_platform.html">Hardware & Platform</a></li>
+                  <li><a href="./exectime.html">Execution Time</a></li>
+                  <li role="separator" class="divider"></li>
+                  <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
+                  <li><a href="#">Data Size</a></li>
+                  <li><a href="#">Price</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="../navbar/">About us</a></li>
+              <li><a href="../navbar/">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+
+
+      <div class="container">
+
+        <div class="grafik">
+
+        </div>
+
+
+      </div> <!-- /container -->
+
+      <script>
+
+            var width = parseInt(d3.select('.grafik').style('width'), 10),
+            height = 500,
+            radius = Math.min(width, height) / 2,
+            innerRadius = 0.3 * radius;
+
+        var pie = d3.layout.pie()
+            .sort(null)
+            .value(function(d) { return d.width; });
+
+        var tip = d3.tip()
+          .attr('class', 'd3-tip')
+          .offset([0, 0])
+          .html(function(d) {
+            return d.data.label + ": <span style='color:orangered'>" + d.data.score + "</span>";
+          });
+
+        var arc = d3.svg.arc()
+          .innerRadius(innerRadius)
+          .outerRadius(function (d) {
+            return (radius - innerRadius) * (d.data.score / 100.0) + innerRadius;
+          });
+
+        var outlineArc = d3.svg.arc()
+                .innerRadius(innerRadius)
+                .outerRadius(radius);
+
+        var svg = d3.select(".grafik").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        svg.call(tip);
+
+        d3.csv('aster_data.csv', function(error, data) {
+
+          data.forEach(function(d) {
+            d.id     =  d.id;
+            d.order  = +d.order;
+            d.color  =  d.color;
+            d.weight = +d.weight;
+            d.score  = +d.score;
+            d.width  = +d.weight;
+            d.label  =  d.label;
+          });
+          // for (var i = 0; i < data.score; i++) { console.log(data[i].id) }
+
+          var path = svg.selectAll(".solidArc")
+              .data(pie(data))
+            .enter().append("path")
+              .attr("fill", function(d) { return d.data.color; })
+              .attr("class", "solidArc")
+              .attr("stroke", "gray")
+              .attr("d", arc)
+              .on('mouseover', tip.show)
+              .on('mouseout', tip.hide);
+
+          var outerPath = svg.selectAll(".outlineArc")
+              .data(pie(data))
+            .enter().append("path")
+              .attr("fill", "none")
+              .attr("stroke", "gray")
+              .attr("class", "outlineArc")
+              .attr("d", outlineArc);
+
+
+          // calculate the weighted mean score
+          var score =
+            data.reduce(function(a, b) {
+              //console.log('a:' + a + ', b.score: ' + b.score + ', b.weight: ' + b.weight);
+              return a + (b.score * b.weight);
+            }, 0) /
+            data.reduce(function(a, b) {
+              return a + b.weight;
+            }, 0);
+
+          svg.append("svg:text")
+            .attr("class", "aster-score")
+            .attr("dy", ".35em")
+            .attr("text-anchor", "middle") // text-align: right
+            .text(Math.round(score));
+
+        });
+
+        d3.select(window).on('resize', resize);
+
+        function resize() {
+            // update width
+            width = parseInt(d3.select('.grafik').style('width'), 10);
+            width = width - margin.left - margin.right;
+
+    // reset x range
+    x.range([0, width]);
+
+    // do the actual resize...
+}
+      </script>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+  </body>
+</html>
