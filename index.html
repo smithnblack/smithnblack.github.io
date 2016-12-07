@@ -21,7 +21,11 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
+
   <body>
+      <?php
+  phpinfo();
+        ?>
       <!-- Statische Navbar -->
       <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
@@ -37,8 +41,6 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="#">Start</a></li>
-              <li><a href="#ueber">About</a></li>
-              <li><a href="#kontakt">Contact</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmarks <span class="caret"></span></a>
                 <ul class="dropdown-menu">
@@ -52,9 +54,8 @@
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="../navbar/">Standard</a></li>
-              <li class="active"><a href="./">Oben statisch <span class="sr-only">(aktuell)</span></a></li>
-              <li><a href="../navbar-fixed-top/">Oben fixiert</a></li>
+              <li><a href="../navbar/">About us</a></li>
+              <li><a href="../navbar/">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -63,17 +64,20 @@
 
       <div class="container">
 
-        <!-- Hauptkomponente für eine primäre Marketing-Botschaft oder einen Aufruf zu einer Aktion -->
+          <!-- Welcome Pages -->
         <div class="jumbotron">
-          <h1>Navbar-Beispiel</h1>
-          <p>Dieses Beispiel ist eine schnelle Übung, um zu zeigen, wie die Standard-Navbar, die statische und die oben fixierte Navbar funktionieren. Es enthält responsives CSS und HTML, passt sich also der Breite deines Bildschirms oder Browser-Fensters an.</p>
-          <p>Um den Unterschied zwischen statischen und oben fixierten Navbars zu sehen, scrolle einfach etwas nach unten und vergleiche das Ergebnis.</p>
+          <h1>Welcome to Bencmarking Library!</h1>
+          <p>Our goal is to present and sort all kind of benchmarks and let user be able to check, compare and be up to date.</p>
+          <p>The Data avaliable on this site was provided from aloja <a href= "http://aloja.bsc.es">Aloja Website</a> </p>
+          <p> This site is under constant development and it is in the process of being documented. For now these Slides and Papers in the Feel free to browse the site, the code, and send inquiries, feature requests or bug reports to: mile@kovac.com
+          <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
           <p>
-            <a class="btn btn-lg btn-primary" href="../../komponenten/#navbar" role="button">Sieh dir die Dokumentation für Navbars an &raquo;</a>
+            <a class="btn btn-lg btn-primary" href="../../komponenten/#navbar" role="button">Check benchmarks &raquo;</a>
           </p>
         </div>
 
       </div> <!-- /container -->
+
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <!-- Include all compiled plugins (below), or include individual files as needed -->
