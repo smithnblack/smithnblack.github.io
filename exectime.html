@@ -96,13 +96,14 @@
       <script>
 
       var query = "SELECT * FROM cost"
-      var jsonFinal = fetch("http://localhost:8086/query?pretty=true&db=benchmarkTEST&q="+query, {
+      fetch("http://localhost:8086/query?pretty=true&db=benchmarkTEST&q="+query, {
                  method: 'GET',
 
                }).then(function(response) {
                    response.json().then(function(data) {
                         jsonObject = data.results[0].series;
                         console.log("hellooooo",jsonObject);
+                        console.log(data.results[0])
 
 
 
