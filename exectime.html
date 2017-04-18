@@ -94,9 +94,9 @@
 
 
       <script>
-
-      var query = "SELECT * FROM cost"
-      fetch("http://localhost:8086/query?pretty=true&db=benchmarkTEST&q="+query, {
+// var query = "SHOW TAG VALUES FROM dataCoresTag WITH KEY = vm_core"
+      var query = "SELECT * FROM dataNormal"
+      fetch("http://localhost:8086/query?pretty=true&db=test&q="+query, {
                  method: 'GET',
 
                }).then(function(response) {
@@ -104,11 +104,7 @@
                         jsonObject = data.results[0].series;
                         console.log("hellooooo",jsonObject);
                         console.log(data.results[0])
-
-
-
-
-
+                        console.log(data)
 
                     })
 
@@ -117,7 +113,34 @@
                     console.log("JSON Object not able to be fetched from InfluxDB")
         })
 
-
+//         var query = "SELECT * FROM data2000"
+//         fetch("https://earthangel-ed2e3506.influxcloud.net:8086/query?&db=test&q="+query, {
+//                    method: 'GET',
+//                    credentials: 'include',
+// cache: 'no-cache',
+// mode:'cors',
+//
+//                  }).then(function(response) {
+//                      response.json().then(function(data) {
+//                           jsonObject = data.results[0].series;
+//                           console.log("hellooooo",jsonObject);
+//                           console.log(data.results[0])
+//
+//
+//
+//
+//
+//
+//                       })
+//
+//
+//                  }).catch(function(err) {
+//                      console.log(err)
+//                       console.log("JSON Object not able to be fetched from InfluxDB")
+//           })
+//
+// //
+//
 
 
         </script>
