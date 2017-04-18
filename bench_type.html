@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hardware & Platform</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="./lib/d3.tip.v0.6.3.js"></script>
+
+
+    <link rel="stylesheet" href="./css/main.css"/>
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+
+  <body>
+      <!-- Statische Navbar -->
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Navigation ein-/ausblenden</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand logoText" href="./index.html">Benchmark Library</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Start</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmarks <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="./hardware_platform.html">Hardware & Platform</a></li>
+                  <li><a href="./exectime.html">Execution Time</a></li>
+                  <li role="separator" class="divider"></li>
+                  <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
+                  <li><a href="#">Data Size</a></li>
+                  <li><a href="#">Price</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="../navbar/">About us</a></li>
+              <li><a href="../navbar/">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+
+      <div class="container">
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmark Type <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">TPCH</a></li>
+              <li><a href="#">Teragen</a></li>
+              <li role="separator" class="divider"></li>
+              <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
+              <li><a href="#">Datagen</a></li>
+              <li><a href="#">join</a></li>
+            </ul>
+          </li>
+      </div>
+
+
+
+      <div class="container" id=grafik></div>
+
+      <div class="container" id=grafik-2ndlvl></div>
+
+
+            <script>
+      // var query = "SHOW TAG VALUES FROM dataCoresTag WITH KEY = vm_core"
+            var query = "SELECT DISTINCT bench FROM data"
+            fetch("http://localhost:8086/query?pretty=true&db=test&q="+query, {
+                       method: 'GET',
+
+                     }).then(function(response) {
+
+                         response.json().then(function(data) {
+
+
+            var clickedNodes= [];
+            var width = 960,
+             height = 500,
+             padding = 1.5, // separation between same-color nodes
+             clusterPadding = 6, // separation between different-color nodes
+             maxRadius = 12;
+
+             var color = d3.scale.ordinal()
+                .range(["#7A99AC", "#E4002B"]);
+
+
+
+
+        var data =data.results[0].series[0].values;
+
+         //unique cluster/group id'
+        var cs = [1];
+         var n = data.length, // total number of nodes
+             m = 1; // number of distinct clusters
+
+         //create clusters and nodes
+         var clusters = new Array(m);
+         var nodes = [];
+
+         for (var i = 0; i<n; i++){
+             nodes.push(create_nodes(data,i));
+         }
+
+         var force = d3.layout.force()
+             .nodes(nodes)
+             .size([width, height])
+             .gravity(.02)
+             .charge(0)
+             .on("tick", tick)
+             .start();
+
+         var svg = d3.select("#grafik").append("svg")
+             .attr("width", width)
+             .attr("height", height);
+
+
+         var node = svg.selectAll("circle")
+             .data(nodes)
+             .enter().append("g").call(force.drag);
+
+
+         node.append("circle")
+             .style("fill", function (d) {
+             return "#337ab7";
+             })
+             .style("opacity", 0.2)
+             .attr("r", function(d){return d.radius})
+             .attr("id",function(d){return "data"+d.id})
+             .on("mouseover", handleMouseOver)
+             .on("mouseout", handleMouseOut)
+             .on("click",clickFunction);
+
+         node.append("text")
+               .attr("dy", ".3em")
+               .style("font-size", "10px")
+            //    .style("fill","grey")
+               .style("text-anchor", "middle")
+               .text(function(d) { return d.text.replace("_"," "); });
+
+
+
+
+         function create_nodes(data,node_counter) {
+            //  console.log(data[node_counter][1])
+           var i = cs.indexOf(data[node_counter].group),
+               r = Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius,
+               d = {
+                 cluster: i,
+                 radius: 25,
+                 text: data[node_counter][1],
+                 x: Math.cos(i / m * 2 * Math.PI) * 200 + width / 2 + Math.random(),
+                 y: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random(),
+                 id: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random()
+               };
+           if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
+           return d;
+         };
+
+
+
+         function tick(e) {
+             node.each(cluster(3 * e.alpha * e.alpha))
+                 .each(collide(.1))
+             .attr("transform", function (d) {
+                 var k = "translate(" + d.x + "," + d.y + ")";
+                 return k;
+             })
+
+         }
+
+         // Move d to be adjacent to the cluster node.
+         function cluster(alpha) {
+             return function (d) {
+                 var cluster = clusters[d.cluster];
+                 if (cluster === d) return;
+                 var x = d.x - cluster.x,
+                     y = d.y - cluster.y,
+                     l = Math.sqrt(x * x + y * y),
+                     r = d.radius + cluster.radius;
+                 if (l != r) {
+                     l = (l - r) / l * alpha;
+                     d.x -= x *= l;
+                     d.y -= y *= l;
+                     cluster.x += x;
+                     cluster.y += y;
+                 }
+             };
+         }
+
+         // Resolves collisions between d and all other circles.
+         function collide(alpha) {
+             var quadtree = d3.geom.quadtree(nodes);
+             return function (d) {
+                 var r = d.radius + maxRadius + Math.max(padding, clusterPadding),
+                     nx1 = d.x - r,
+                     nx2 = d.x + r,
+                     ny1 = d.y - r,
+                     ny2 = d.y + r;
+                 quadtree.visit(function (quad, x1, y1, x2, y2) {
+                     if (quad.point && (quad.point !== d)) {
+                         var x = d.x - quad.point.x,
+                             y = d.y - quad.point.y,
+                             l = Math.sqrt(x * x + y * y),
+                             r = d.radius + quad.point.radius + (d.cluster === quad.point.cluster ? padding : clusterPadding);
+                         if (l < r) {
+                             l = (l - r) / l * alpha;
+                             d.x -= x *= l;
+                             d.y -= y *= l;
+                             quad.point.x += x;
+                             quad.point.y += y;
+                         }
+                     }
+                     return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+                 });
+             };
+         }
+
+
+         Array.prototype.contains = function(v) {
+             for(var i = 0; i < this.length; i++) {
+                 if(this[i] === v) return true;
+             }
+             return false;
+         };
+
+         function handleMouseOver(d, i) {  // Add interactivity
+
+           // Use D3 to select element, change color and size
+           d3.select(this).attr({
+             r: 20 * 2
+           });
+       }
+
+       function handleMouseOut(d, i) {  // Add interactivity
+
+         // Use D3 to select element, change color and size
+         d3.select(this).attr({
+           r: 25
+         });
+        }
+        //on click call other viz
+        function clickFunction(d,i){
+            // d3.selectAll('#grafik-2ndlvl').remove();
+
+            if (clickedNodes.includes(d)) {
+
+                // change back the style
+                document.getElementById("data"+d.id).style.fill = "#337ab7";
+                document.getElementById("data"+d.id).style.opacity = 0.2;
+                //TODO
+                // console.log(d3.select("#grafik-2ndlvl").remove("#grafik-2ndlvl"+d.id));
+                // remove it from the clickedNodes array
+                clickedNodes.pop(d);
+                console.log("remove",clickedNodes)
+
+
+            } else {
+                // first time clicked?
+                clickedNodes.push(d);
+                console.log("insert",clickedNodes)
+                d3.select(this).attr({
+                  style:"fill: grey"
+              });
+            }
+
+
+
+            var query2 = "select exe_time,datasize,scale_factor,description,cost_hour,id_exec from data where bench='"+d.text+"'"
+            fetch("http://localhost:8086/query?pretty=true&db=test&q="+query2, {
+                       method: 'GET',
+
+                     }).then(function(response) {
+                         response.json().then(function(data) {
+
+
+
+                             var margin = {top: 20, right: 40, bottom: 30, left: 60},
+                                width = 960 - margin.left - margin.right,
+                                height = 500 - margin.top - margin.bottom;
+                            /*
+                             * value accessor - returns the value to encode for a given data object.
+                             * scale - maps value to a visual display encoding, such as a pixel position.
+                             * map function - maps from data value to display value
+                             * axis - sets up axis
+                             */
+                            //  var data = data.results[0].series[0].values;
+                            //  console.log("first run",data.results[0].series[0].values);
+                            var dataRe =data.results[0].series[0].values;
+                             var nodes = [];
+                             var x = dataRe.length;
+
+                             for (var i = 0; i<x; i++){
+                                 nodes.push(create_nodes(dataRe,i));
+                             }
+
+                            // setup x
+                            var xValue = function(d) { return d.datasize/1000000;}, // data -> value
+                                xScale = d3.scale.linear().range([0, width]), // value -> display
+                                xMap = function(d) { return xScale(d.datasize/1000000);}, // // data -> display
+                                xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+
+                            // setup y
+                            var yValue = function(d) { return d.exe_time;}, // data -> value
+                                yScale = d3.scale.linear().range([height, 0]), // value -> display
+                                yMap = function(d) { return yScale(d.exe_time);}, // data -> display
+                                yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+
+                            // setup fill color
+                            var cValue = function(d) { return d.cost;},
+                                color = d3.scale.category10();
+
+                            // add the graph canvas to the body of the webpage
+                            var svg = d3.select("#grafik-2ndlvl").append("svg")
+                                .attr("width", width + margin.left + margin.right)
+                                .attr("height", height + margin.top + margin.bottom)
+                                .attr("id",function(){
+                                    console.log(d);
+                                    return "2ndlvl"+d.id;
+                                })
+                              .append("g")
+                                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                            // add the tooltip area to the webpage
+                            var tooltip = d3.select("#grafik-2ndlvl").append("div")
+                                .attr("class", "tooltip")
+                                .style("opacity", 0);
+
+                            // load data
+
+                              // change string (from CSV) into number format
+                              nodes.forEach(function(d) {
+                                d.exe_time = +d.exe_time;
+                                d.datasize = +d.datasize;
+                            //    console.log(d);
+                              });
+
+                              // don't want dots overlapping axis, so add in buffer to data domain
+                              xScale.domain([d3.min(nodes, xValue)-1, d3.max(nodes, xValue)+1]);
+                              yScale.domain([d3.min(nodes, yValue)-1, d3.max(nodes, yValue)+1]);
+
+                              // x-axis
+                              svg.append("g")
+                                  .attr("class", "x axis")
+                                  .attr("transform", "translate(0," + height + ")")
+                                  .call(xAxis)
+                                .append("text")
+                                  .attr("class", "label")
+                                  .attr("x", width)
+                                  .attr("y", -6)
+                                  .style("text-anchor", "end")
+                                  .text("Data Size");
+
+                              // y-axis
+                              svg.append("g")
+                                  .attr("class", "y axis")
+                                  .call(yAxis)
+                                .append("text")
+                                  .attr("class", "label")
+                                  .attr("transform", "rotate(-90)")
+                                  .attr("y", 6)
+                                  .attr("dy", ".71em")
+                                  .style("text-anchor", "end")
+                                  .text("Execution Time (ms)");
+
+                              // draw dots
+                              svg.selectAll(".dot")
+                                  .data(nodes)
+                                .enter().append("circle")
+                                  .attr("class", "dot")
+                                  .attr("r", 3.5)
+                                  .attr("cx", xMap)
+                                  .attr("cy", yMap)
+                                  .attr("id","data"+d.id_exec)
+                                  .style("fill", function(d) { return color(cValue(d));})
+                                  .on("mouseover", function(d) {
+                                      tooltip.transition()
+                                           .duration(200)
+                                           .style("opacity", .9);
+                                      tooltip.html(d.description + "  "+ d.id_exec +"<br/> (" + xValue(d)
+                            	        + ", " + yValue(d) + "ms)")
+                                           .style("left", (d3.event.pageX + 5) + "px")
+                                           .style("top", (d3.event.pageY - 28) + "px");
+                                  })
+                                  .on("mouseout", function(d) {
+                                      tooltip.transition()
+                                           .duration(500)
+                                           .style("opacity", 0);
+                                  });
+
+
+                                  // disk mit exec_time (bar charAt) + cost_disk
+                                  // datanodes mit exec_time (bar chart)
+
+                              // draw legend
+                              var legend = svg.selectAll(".legend")
+                                  .data(color.domain())
+                                .enter().append("g")
+                                  .attr("class", "legend")
+                                  .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+                              // draw legend colored rectangles
+                              legend.append("rect")
+                                  .attr("x", width - 18)
+                                  .attr("width", 18)
+                                  .attr("height", 18)
+                                  .style("fill", color);
+
+                            //   draw legend text
+                              legend.append("text")
+                                  .attr("x", width - 24)
+                                  .attr("y", 9)
+                                  .attr("dy", ".35em")
+                                  .style("text-anchor", "end")
+                                  .text(function(d) { return d;})
+
+
+                            function create_nodes(data,node_counter) {
+
+
+                                    var d = {
+                                       exe_time: data[node_counter][1],
+                                       datasize: data[node_counter][2],
+                                       scale: data[node_counter][3],
+                                       description: data[node_counter][4],
+                                       cost: data[node_counter][5],
+                                       id_exec:data[node_counter][6]
+                                   }
+                                 return d;
+
+                            };
+
+                            // pageScroll();
+                            // console.log("click data",data)
+
+
+                         }).catch(function(err) {
+                              console.log("JSON Object not able to be fetched from InfluxDB",err)
+                  })
+              }
+    )}
+
+
+                                                  })
+
+
+                     }).catch(function(err) {
+                          console.log("JSON Object not able to be fetched from InfluxDB")
+              })
+
+              function pageScroll() {
+                  window.scrollBy(0,1);
+                  scrolldelay = setTimeout(pageScroll,5);
+}
+
+
+              </script>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+  </body>
+</html>
