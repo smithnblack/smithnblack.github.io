@@ -4,15 +4,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Benchmark Library</title>
+    <title>Hardware & Platform</title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script type="text/javascript" src="http://get.influxdb.org/influxdb-latest.js"
+    <script src="./lib/d3.tip.v0.6.3.js"></script>
 
     <link rel="stylesheet" href="./css/main.css"/>
+
 
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -26,6 +27,7 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
+
 
   <body>
       <!-- Statische Navbar -->
@@ -42,11 +44,11 @@
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="./index.html">Start</a></li>
+              <li class="active"><a href="#">Start</a></li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmarks <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">Hardware & Platform</a></li>
+                  <li><a href="./hardware_platform.html">Hardware & Platform</a></li>
                   <li><a href="./exectime.html">Execution Time</a></li>
                   <li role="separator" class="divider"></li>
                   <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
@@ -63,7 +65,6 @@
         </div>
       </nav>
 
-
       <div class="container">
 
           <li class="dropdown">
@@ -79,136 +80,106 @@
           </li>
       </div>
 
+
+
       <div class="container">
 
-
-
-          <!-- Welcome Pages -->
         <div class="grafik">
+
+            <script>
+      // var query = "SHOW TAG VALUES FROM dataCoresTag WITH KEY = vm_core"
+            var query = "SELECT exec FROM data where time < now()"
+            fetch("http://localhost:8086/query?pretty=true&db=test&q="+query, {
+                       method: 'GET',
+
+                     }).then(function(response) {
+                         response.json().then(function(data) {
+
+                        //      var margin = {top: 20, right: 20, bottom: 70, left: 40},
+                        //      width = 600 - margin.left - margin.right,
+                        //      height = 300 - margin.top - margin.bottom;
+                         //
+                        //  // Parse the date / time
+                        //  var	parseDate = d3.time.format("%Y-%m").parse;
+                         //
+                        //  var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+                         //
+                        //  var y = d3.scale.linear().range([height, 0]);
+                         //
+                        //  var xAxis = d3.svg.axis()
+                        //      .scale(x)
+                        //      .orient("bottom")
+                        //      .tickFormat(d3.time.format("%Y-%m"));
+                         //
+                        //  var yAxis = d3.svg.axis()
+                        //      .scale(y)
+                        //      .orient("left")
+                        //      .ticks(10);
+                         //
+                        //  var svg = d3.select("body").append("svg")
+                        //      .attr("width", width + margin.left + margin.right)
+                        //      .attr("height", height + margin.top + margin.bottom)
+                        //    .append("g")
+                        //      .attr("transform",
+                        //            "translate(" + margin.left + "," + margin.top + ")");
+                         //
+                         //
+                        //    x.domain(data.results[0].series.map(function(d) { return d.date; }));
+                        //    y.domain([0, d3.max(data.results[0].columns, function(d) { return d.value; })]);
+                         //
+                        //    svg.append("g")
+                        //        .attr("class", "x axis")
+                        //        .attr("transform", "translate(0," + height + ")")
+                        //        .call(xAxis)
+                        //      .selectAll("text")
+                        //        .style("text-anchor", "end")
+                        //        .attr("dx", "-.8em")
+                        //        .attr("dy", "-.55em")
+                        //        .attr("transform", "rotate(-90)" );
+                         //
+                        //    svg.append("g")
+                        //        .attr("class", "y axis")
+                        //        .call(yAxis)
+                        //      .append("text")
+                        //        .attr("transform", "rotate(-90)")
+                        //        .attr("y", 6)
+                        //        .attr("dy", ".71em")
+                        //        .style("text-anchor", "end")
+                        //        .text("Value ($)");
+                         //
+                        //    svg.selectAll("bar")
+                        //        .data(data)
+                        //      .enter().append("rect")
+                        //        .style("fill", "steelblue")
+                        //        .attr("x", function(d) { return x(d.date); })
+                        //        .attr("width", x.rangeBand())
+                        //        .attr("y", function(d) { return y(d.value); })
+                        //        .attr("height", function(d) { return height - y(d.value); });
+
+
+
+                                                      jsonObject = data.results[0].series;
+                                                      console.log("hellooooo",jsonObject);
+                                                      console.log(data.results[0])
+                                                      console.log(data)
+
+                                                  })
+
+
+                     }).catch(function(err) {
+                          console.log("JSON Object not able to be fetched from InfluxDB")
+              })
+
+
+              </script>
 
         </div>
 
+
       </div> <!-- /container -->
 
-      <script>
 
-      var n = 4, // number of layers
-          m = 58, // number of samples per layer
-          stack = d3.layout.stack(),
-          layers = stack(d3.range(n).map(function() { return bumpLayer(m, .1); })),
-          yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); }),
-          yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
 
-      var margin = {top: 40, right: 10, bottom: 20, left: 10},
-          width = 960 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
-
-      var x = d3.scale.ordinal()
-          .domain(d3.range(m))
-          .rangeRoundBands([0, width], .08);
-
-      var y = d3.scale.linear()
-          .domain([0, yStackMax])
-          .range([height, 0]);
-
-      var color = d3.scale.linear()
-          .domain([0, n - 1])
-          .range(["#aad", "#556"]);
-
-      var xAxis = d3.svg.axis()
-          .scale(x)
-          .tickSize(0)
-          .tickPadding(6)
-          .orient("bottom");
-
-      var svg = d3.select(".grafik").append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      var layer = svg.selectAll(".layer")
-          .data(layers)
-        .enter().append("g")
-          .attr("class", "layer")
-          .style("fill", function(d, i) { return color(i); });
-
-      var rect = layer.selectAll("rect")
-          .data(function(d) { return d; })
-        .enter().append("rect")
-          .attr("x", function(d) { return x(d.x); })
-          .attr("y", height)
-          .attr("width", x.rangeBand())
-          .attr("height", 0);
-
-      rect.transition()
-          .delay(function(d, i) { return i * 10; })
-          .attr("y", function(d) { return y(d.y0 + d.y); })
-          .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); });
-
-      svg.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")")
-          .call(xAxis);
-
-      d3.selectAll("input").on("change", change);
-
-      var timeout = setTimeout(function() {
-        d3.select("input[value=\"grouped\"]").property("checked", true).each(change);
-      }, 2000);
-
-      function change() {
-        clearTimeout(timeout);
-        if (this.value === "grouped") transitionGrouped();
-        else transitionStacked();
-      }
-
-      function transitionGrouped() {
-        y.domain([0, yGroupMax]);
-
-        rect.transition()
-            .duration(500)
-            .delay(function(d, i) { return i * 10; })
-            .attr("x", function(d, i, j) { return x(d.x) + x.rangeBand() / n * j; })
-            .attr("width", x.rangeBand() / n)
-          .transition()
-            .attr("y", function(d) { return y(d.y); })
-            .attr("height", function(d) { return height - y(d.y); });
-      }
-
-      function transitionStacked() {
-        y.domain([0, yStackMax]);
-
-        rect.transition()
-            .duration(500)
-            .delay(function(d, i) { return i * 10; })
-            .attr("y", function(d) { return y(d.y0 + d.y); })
-            .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
-          .transition()
-            .attr("x", function(d) { return x(d.x); })
-            .attr("width", x.rangeBand());
-      }
-
-      // Inspired by Lee Byron's test data generator.
-      function bumpLayer(n, o) {
-
-        function bump(a) {
-          var x = 1 / (.1 + Math.random()),
-              y = 2 * Math.random() - .5,
-              z = 10 / (.1 + Math.random());
-          for (var i = 0; i < n; i++) {
-            var w = (i / n - y) * z;
-            a[i] += x * Math.exp(-w * w);
-          }
-        }
-
-        var a = [], i;
-        for (i = 0; i < n; ++i) a[i] = o + o * Math.random();
-        for (i = 0; i < 5; ++i) bump(a);
-        return a.map(function(d, i) { return {x: i, y: Math.max(0, d)}; });
-      }
-
-      </script>
 
 
 
