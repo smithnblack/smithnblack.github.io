@@ -1,0 +1,8 @@
+id,value
+Browser[User],
+Browser[User].View,
+Browser[User].View.JavaScript,
+Browser[User].View.JavaScript.Bootstrap,
+Browser[User].View.JavaScript.D3 Library,
+Browser[User].View.JavaScript.jQuery,
+Browser[User].View.JavaScript.D3 Library.InfluxDB

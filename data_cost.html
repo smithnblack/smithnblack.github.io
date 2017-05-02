@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>IBD Portal | Datasize vs. Time</title>
+    <title>IBD Portal | Datasize vs. Cost</title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
@@ -285,8 +285,6 @@
                         return d.text.replace("_", " ");
                     });
 
-            // radio buttons
-            d3.select("#grafik-selector").html('Data: <form> <label class="radio-inline"> <input type="radio" name="optradio">mb </label> <label class="radio-inline"> <input type="radio" name="optradio">kb </label> <label class="radio-inline2"> <input type="radio" name="optradio2">sec </label> <label class="radio-inline2"> <input type="radio" name="optradio2">min </label> </form>')
 
             // create nodes from the data, with its values
             function create_nodes(data, node_counter) {
@@ -379,7 +377,6 @@
 
             function handleMouseOver(d, i) {  // Add interactivity
 
-                console.log(d.text)
                 // Use D3 to select element, change color and size
                 d3.select(this).attr({
                     r: 20 * 2
@@ -439,19 +436,17 @@
                     // console.log(d3.select("#grafik-2ndlvl").remove("#grafik-2ndlvl"+d.id));
                     // remove it from the clickedNodes array
                     clickedNodes.pop(d);
-                    console.log("remove", clickedNodes)
 
 
                 } else {
                     // first time clicked?
                     clickedNodes.push(d);
-                    console.log("insert", clickedNodes);
                     d3.select(this).attr({
                         style: "fill: grey"
                     });
 
 
-                    var query2 = "select exe_time,datasize,scale_factor,description,cost_hour,id_exec from data where bench='" + d.text + "'";
+                    var query2 = "select cost_hour,datasize,scale_factor,description, id_exec,cost_remote,cost_SSD from data where bench='" + d.text + "'";
                     fetch("http://localhost:8086/query?pretty=true&db=test&q=" + query2, {
                         method: 'GET',
 
@@ -470,8 +465,7 @@
                                  */
                             //  var data = data.results[0].series[0].values;
                             //  console.log("first run",data.results[0].series[0].values);
-                                var dataRe =
-                                        data.results[0].series[0].values;
+                                var dataRe = data.results[0].series[0].values;
                                 var nodes = [];
                                 var x = dataRe.length;
 
@@ -485,7 +479,7 @@
                                         }, // data -> value
                                         xScale = d3.scale.linear().range([0, width]), // value -> display
                                         xMap = function (d) {
-                                            return xScale(d.datasize /1048576);
+                                            return xScale(d.datasize/1048576);
                                         }, // // data -> display
                                         xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 
@@ -502,7 +496,7 @@
 
                                 // setup fill color
                                 var cValue = function (d) {
-                                            return d.cost;
+                                            return d.vm_ram;
                                         },
                                         color = d3.scale.category10();
 
@@ -528,17 +522,14 @@
                                         .attr("dy", ".35em")
                                         .text("Graph: "+d.text.replace("_"," "));
 
-                                // load data
 
-                                // change string (from CSV) into number format
                                 nodes.forEach(function (d) {
                                     d.cost_hour = +d.cost_hour;
                                     d.datasize = +d.datasize;
-                                    //    console.log(d);
                                 });
 
                                 // don't want dots overlapping axis, so add in buffer to data domain
-                                xScale.domain([d3.min(nodes, xValue) - 1, d3.max(nodes, xValue) + 1]);
+                            xScale.domain([d3.min(nodes, xValue) - 1, d3.max(nodes, xValue) + 1]);
                                 yScale.domain([d3.min(nodes, yValue) - 1, d3.max(nodes, yValue) + 1]);
 
                                 // x-axis
@@ -563,7 +554,7 @@
                                         .attr("y", 6)
                                         .attr("dy", ".71em")
                                         .style("text-anchor", "end")
-                                        .text("Execution Time (s)");
+                                        .text("Cost per Hour");
 
                                 // draw dots
                                 svg.selectAll(".dot")
@@ -581,9 +572,9 @@
                                             tooltip.transition()
                                                     .duration(200)
                                                     .style("opacity", .9);
-                                            tooltip.html(d.description + "  " + "<br/> (" + "Datasize: "+xValue(d)
-                                                    + ", " + "Time: "+yValue(d) + "ms)")
-                                                    .style("left", (d3.event.pageX + 5) + "px")
+                                            tooltip.html(d.description + "  " + "<br/> " + "Data Size: "+d.datasize/1048576
+                                                    + " " + "<br/>"+"Cost per Hour: "+yValue(d) + "  "+"<br/>"+ "Cost Remote: "+d.cost_remote +"<br/>"+ " Cost SSD: "+d.cost_ssd +"")
+                                                    .style("left", (d3.event.pageX + 20) + "px")
                                                     .style("top", (d3.event.pageY - 28) + "px");
                                         })
                                         .on("mouseout", function (d) {
@@ -605,38 +596,7 @@
                                             return "translate(" + i * 20 + ",0)";
                                         });
 
-                                // draw legend colored rectangles
-                                legend.append("rect")
-                                        .attr("x", width/2)
-                                        .attr("y",20)
-                                        .attr("width", 10)
-                                        .attr("height", 10)
-                                        .style("fill", color)
-                                        .on("mouseover",function (d) {
-                                            tooltip.transition()
-                                                    .duration(200)
-                                                    .style("opacity", .9);
-                                            tooltip.html("Cost per Hour: "+d+" Euro")
-                                                    .style("left", (d3.event.pageX+50) + "px")
-                                                    .style("top", (d3.event.pageY - 20) + "px");
-                            })
-                                        .on("mouseout",function (d) {
-                                            tooltip.transition()
-                                                    .duration(500)
-                                                    .style("opacity", 0);
-                                        });
 
-
-
-                                //   draw legend text
-//                                legend.append("text")
-//                                        .attr("x", width - 24)
-//                                        .attr("y", 9)
-//                                        .attr("dy", ".35em")
-//                                        .style("text-anchor", "end")
-//                                        .text(function (d) {
-//                                            return "Cost per Hour "+d;
-//                                        })
 
                                         var svgSeparator1 =
                                                 svg.append("line")          // attach a line
@@ -666,14 +626,13 @@
                                         scale: data[node_counter][3],
                                         description: data[node_counter][4],
                                         cost: data[node_counter][5],
-                                        id_exec: data[node_counter][6]
+                                        id_exec: data[node_counter][6],
+                                        cost_remote : data[node_counter][6],
+                                        cost_ssd: data[node_counter][7]
                                     }
                                     return d;
 
                                 };
-
-                                // pageScroll();
-                                // console.log("click data",data)
 
 
                             }).catch(function (err) {

@@ -43,7 +43,7 @@
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                   </button>
-                  <a class="navbar-brand logoText"  href="./index.html">Benchmarking Portal</a>
+                  <a class="navbar-brand logoText"  href="./index.html">IBD Benchmarking Portal</a>
               </div>
               <div id="navbar" class="navbar-collapse collapse">
                   <ul class="nav navbar-nav">
@@ -58,7 +58,6 @@
                               <li><a href="./nodes_time.html">Data Nodes vs. VM RAM vs. Time</a></li>
 
                               <li role="separator" class="divider"></li>
-                              <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
                               <li><a href="./compare.html">Compare</a></li>
                               <li><a href="./hadoop.html">Hadoop Version</a></li>
                               <li><a href="./custom.html">Custom</a></li>
@@ -70,7 +69,7 @@
 
                   <ul class="nav navbar-nav navbar-right">
                       <li><a href="./about.html">About us</a></li>
-                      <li><a href="../navbar/">Contact</a></li>
+                      <li><a href="./contact.html">Contact</a></li>
                   </ul>
               </div><!--/.nav-collapse -->
           </div>
@@ -416,8 +415,6 @@
                      .style("text-align", "center")
                      .style("padding","5px 0")
                      .style("border-radius","6px")
-                     //                        .style("left", (d3.event.pageX + 300) + "px")
-                     //                        .style("top", (d3.event.pageY - 28) + "px");
                      .style("left",width-145+"px")
                      .style("top",140+"px")
                      .style("width",250+"px")
@@ -454,7 +451,6 @@
                      break;
                  default:
                      filter = "no filter set";
-                     console.log(filter);
              }
              doVisualize(filter,clickedNodes);
 

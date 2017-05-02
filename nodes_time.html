@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>IBD Portal | Datasize vs. Time</title>
+    <title>IBD Portal | Data Nodes vs. Time</title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
@@ -107,7 +107,7 @@
                     .range(["#7A99AC", "#E4002B"]);
 
 
-            var data = data.results[0].series[0].values;
+            data = data.results[0].series[0].values;
 
             //unique cluster/group id'
             var cs = [1];
@@ -286,7 +286,6 @@
                     });
 
             // radio buttons
-            d3.select("#grafik-selector").html('Data: <form> <label class="radio-inline"> <input type="radio" name="optradio">mb </label> <label class="radio-inline"> <input type="radio" name="optradio">kb </label> <label class="radio-inline2"> <input type="radio" name="optradio2">sec </label> <label class="radio-inline2"> <input type="radio" name="optradio2">min </label> </form>')
 
             // create nodes from the data, with its values
             function create_nodes(data, node_counter) {
@@ -379,7 +378,6 @@
 
             function handleMouseOver(d, i) {  // Add interactivity
 
-                console.log(d.text)
                 // Use D3 to select element, change color and size
                 d3.select(this).attr({
                     r: 20 * 2
@@ -439,19 +437,17 @@
                     // console.log(d3.select("#grafik-2ndlvl").remove("#grafik-2ndlvl"+d.id));
                     // remove it from the clickedNodes array
                     clickedNodes.pop(d);
-                    console.log("remove", clickedNodes)
 
 
                 } else {
                     // first time clicked?
                     clickedNodes.push(d);
-                    console.log("insert", clickedNodes);
                     d3.select(this).attr({
                         style: "fill: grey"
                     });
 
 
-                    var query2 = "select exe_time,datasize,scale_factor,description,cost_hour,id_exec from data where bench='" + d.text + "'";
+                    var query2 = "select exe_time,datanodes,scale_factor,description,cost_hour,id_exec,vm_RAM from data where bench='" + d.text + "'";
                     fetch("http://localhost:8086/query?pretty=true&db=test&q=" + query2, {
                         method: 'GET',
 
@@ -481,11 +477,11 @@
                                 // setup x
                             //TODO bytes --> gb or mb? ms ---> time also s or minutes
                                 var xValue = function (d) {
-                                            return d.datasize/1048576 ;
+                                            return d.datasize ;
                                         }, // data -> value
                                         xScale = d3.scale.linear().range([0, width]), // value -> display
                                         xMap = function (d) {
-                                            return xScale(d.datasize /1048576);
+                                            return xScale(d.datasize);
                                         }, // // data -> display
                                         xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 
@@ -502,7 +498,7 @@
 
                                 // setup fill color
                                 var cValue = function (d) {
-                                            return d.cost;
+                                            return d.vm_ram;
                                         },
                                         color = d3.scale.category10();
 
@@ -528,9 +524,7 @@
                                         .attr("dy", ".35em")
                                         .text("Graph: "+d.text.replace("_"," "));
 
-                                // load data
 
-                                // change string (from CSV) into number format
                                 nodes.forEach(function (d) {
                                     d.cost_hour = +d.cost_hour;
                                     d.datasize = +d.datasize;
@@ -538,7 +532,8 @@
                                 });
 
                                 // don't want dots overlapping axis, so add in buffer to data domain
-                                xScale.domain([d3.min(nodes, xValue) - 1, d3.max(nodes, xValue) + 1]);
+                                // 0 to 18, because 16 is max data node
+                                xScale.domain([0,18]);
                                 yScale.domain([d3.min(nodes, yValue) - 1, d3.max(nodes, yValue) + 1]);
 
                                 // x-axis
@@ -551,7 +546,7 @@
                                         .attr("x", width)
                                         .attr("y", 0)
                                         .style("text-anchor", "end")
-                                        .text("Data Size");
+                                        .text("Data Nodes");
 
                                 // y-axis
                                 svg.append("g")
@@ -581,8 +576,8 @@
                                             tooltip.transition()
                                                     .duration(200)
                                                     .style("opacity", .9);
-                                            tooltip.html(d.description + "  " + "<br/> (" + "Datasize: "+xValue(d)
-                                                    + ", " + "Time: "+yValue(d) + "ms)")
+                                            tooltip.html(d.description + "  " + "<br/> (" + "Data Nodes: "+xValue(d)
+                                                    + ", " + "Time: "+yValue(d) + " s, "+ "VM-RAM: "+d.vm_ram + "GB)")
                                                     .style("left", (d3.event.pageX + 5) + "px")
                                                     .style("top", (d3.event.pageY - 28) + "px");
                                         })
@@ -592,9 +587,6 @@
                                                     .style("opacity", 0);
                                         });
 
-
-                                // disk mit exec_time (bar charAt) + cost_disk
-                                // datanodes mit exec_time (bar chart)
 
                                 // draw legend
                                 var legend = svg.selectAll(".legend")
@@ -607,7 +599,7 @@
 
                                 // draw legend colored rectangles
                                 legend.append("rect")
-                                        .attr("x", width/2)
+                                        .attr("x", width)
                                         .attr("y",20)
                                         .attr("width", 10)
                                         .attr("height", 10)
@@ -616,7 +608,7 @@
                                             tooltip.transition()
                                                     .duration(200)
                                                     .style("opacity", .9);
-                                            tooltip.html("Cost per Hour: "+d+" Euro")
+                                            tooltip.html("VM RAM: "+d+" GB")
                                                     .style("left", (d3.event.pageX+50) + "px")
                                                     .style("top", (d3.event.pageY - 20) + "px");
                             })
@@ -627,16 +619,6 @@
                                         });
 
 
-
-                                //   draw legend text
-//                                legend.append("text")
-//                                        .attr("x", width - 24)
-//                                        .attr("y", 9)
-//                                        .attr("dy", ".35em")
-//                                        .style("text-anchor", "end")
-//                                        .text(function (d) {
-//                                            return "Cost per Hour "+d;
-//                                        })
 
                                         var svgSeparator1 =
                                                 svg.append("line")          // attach a line
@@ -666,14 +648,12 @@
                                         scale: data[node_counter][3],
                                         description: data[node_counter][4],
                                         cost: data[node_counter][5],
-                                        id_exec: data[node_counter][6]
+                                        id_exec: data[node_counter][6],
+                                        vm_ram : data[node_counter][7]
                                     }
                                     return d;
 
                                 };
-
-                                // pageScroll();
-                                // console.log("click data",data)
 
 
                             }).catch(function (err) {
@@ -689,12 +669,8 @@
 
     }).catch(function (err) {
         console.log("JSON Object not able to be fetched from InfluxDB : "+err)
-    })
+    });
 
-    function pageScroll() {
-        window.scrollBy(0, 1);
-        scrolldelay = setTimeout(pageScroll, 5);
-    }
 
 
 </script>

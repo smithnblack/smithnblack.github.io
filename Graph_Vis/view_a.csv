@@ -1,0 +1,34 @@
+id,value
+Start Page,
+Start Page.Benchmarks,
+Start Page.Benchmarks.Datasize vs Time,
+Start Page.Benchmarks.Datasize vs Cost,
+Start Page.Benchmarks.Data Nodes vs VM RAM vs Time,
+Start Page.Benchmarks.Compare,
+Start Page.Benchmarks.Hadoop Version,
+Start Page.Benchmarks.Custom,
+Start Page.Benchmarks.Benchmark Type,100
+Start Page.Benchmarks.Benchmark Type.Teragen,100
+Start Page.Benchmarks.Benchmark Type.Terasort,100
+Start Page.Benchmarks.Benchmark Type.Wordcount,100
+Start Page.Benchmarks.Benchmark Type.Teravalidate,100
+Start Page.Benchmarks.Benchmark Type.DFSIO Write,100
+Start Page.Benchmarks.Benchmark Type.DFSIO Read,100
+Start Page.Benchmarks.Benchmark Type.Sort,100
+Start Page.Benchmarks.Benchmark Type.Random Text Writer,100
+Start Page.Benchmarks.Benchmark Type.Grep,100
+Start Page.Benchmarks.Benchmark Type.Datagen,100
+Start Page.Benchmarks.Benchmark Type.Prepare Aggregation,100
+Start Page.Benchmarks.Benchmark Type.Aggregation,100
+Start Page.Benchmarks.Benchmark Type.Prepare Join,100
+Start Page.Benchmarks.Benchmark Type.User Visits Copy,100
+Start Page.Benchmarks.Benchmark Type.Join,100
+Start Page.Benchmarks.Benchmark Type.TPC-H,100
+Start Page.Benchmarks.Benchmark Type.TPC-H.Hadoop Datagen,100
+Start Page.Benchmarks.Benchmark Type.TPC-H.Load Text,100
+Start Page.Benchmarks.Benchmark Type.TPC-H.Load Optimize,100
+Start Page.Benchmarks.Benchmark Type.TPC-H.TPC-H 22 Queries,100
+Start Page.About,
+Start Page.Overview,
+Start Page.Import,
+Start Page.Contact

@@ -41,7 +41,7 @@
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                   </button>
-                  <a class="navbar-brand logoText"  href="./index.html">Benchmarking Portal</a>
+                  <a class="navbar-brand logoText"  href="./index.html">IBD Benchmarking Portal</a>
               </div>
               <div id="navbar" class="navbar-collapse collapse">
                   <ul class="nav navbar-nav">
@@ -68,7 +68,7 @@
 
                   <ul class="nav navbar-nav navbar-right">
                       <li><a href="./about.html">About us</a></li>
-                      <li><a href="../navbar/">Contact</a></li>
+                      <li><a href="./contact.html">Contact</a></li>
                   </ul>
               </div><!--/.nav-collapse -->
           </div>
@@ -91,7 +91,6 @@
                          response.json().then(function(data) {
 
 
-            var clickedNodes = [];
 
             var width = 960,
              height = 500,
@@ -223,7 +222,7 @@
 
 
 
-        var data =data.results[0].series[0].values;
+        data =data.results[0].series[0].values;
 
          //unique cluster/group id'
         var cs = [1];
@@ -291,7 +290,7 @@
                      text: data[node_counter][1],
                      x: Math.cos(i / m * 2 * Math.PI) * 200 + width / 2 + Math.random(),
                      y: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random(),
-                       id: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random()
+                     id: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random()
                    };
                if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
                return d;
@@ -385,8 +384,6 @@
                      .style("text-align", "center")
                      .style("padding","5px 0")
                      .style("border-radius","6px")
-                     //                        .style("left", (d3.event.pageX + 300) + "px")
-                     //                        .style("top", (d3.event.pageY - 28) + "px");
                      .style("left",width-145+"px")
                      .style("top",100+"px")
                      .style("width",250+"px")
@@ -405,12 +402,7 @@
                    .duration(500)
                    .style("opacity", 0);
 
-       }
-
-
-
-
-      })
+       }})
 
 
                      }).catch(function(err) {
@@ -425,8 +417,5 @@
 
               </script>
 
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
   </body>
 </html>
