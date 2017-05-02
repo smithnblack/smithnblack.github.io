@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IBD Portal | Overview</title>
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="./lib/d3.tip.v0.6.3.js"></script>
+      <script src="http://vizjs.org/viz.v1.1.0.min.js"></script>
+
+
+
+      <link rel="stylesheet" href="./css/main.css"/>
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+
+  <body>
+      <!-- Statische Navbar -->
+      <nav class="navbar navbar-default navbar-static-top">
+          <div class="container">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                      <span class="sr-only">Navigation ein-/ausblenden</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand logoText"  href="./index.html">Benchmarking Portal</a>
+              </div>
+              <div id="navbar" class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav">
+                      <li><a href="./overview.html">Overview</a></li>
+
+                      <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmarks <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                              <li><a href="./bench_type.html">Benchmark Type</a></li>
+                              <li><a href="data_time.html">Datasize vs. Time</a></li>
+                              <li><a href="data_cost.html">Datasize vs. Cost</a></li>
+                              <li><a href="./nodes_time.html">Data Nodes vs. VM RAM vs. Time</a></li>
+
+                              <li role="separator" class="divider"></li>
+                              <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
+                              <li><a href="./compare.html">Compare</a></li>
+                              <li><a href="./hadoop.html">Hadoop Version</a></li>
+                              <li><a href="./custom.html">Custom</a></li>
+
+                          </ul>
+                      </li>
+                      <li><a href="./import.html">Import</a></li>
+                  </ul>
+
+                  <ul class="nav navbar-nav navbar-right">
+                      <li><a href="./about.html">About us</a></li>
+                      <li><a href="../navbar/">Contact</a></li>
+                  </ul>
+              </div><!--/.nav-collapse -->
+          </div>
+      </nav>
+
+
+
+      <div class="container" id=grafik></div>
+
+      <div class="container" id=grafik-2ndlvl></div>
+
+
+            <script>
+
+
+                /**
+                 * data of different targets and different targets
+                 * @type {*["target","benchmark",value,value]}
+                 */
+                var data=[
+                    ['Standards','TPC-H',16,0],
+                    ['Standards','TPC-DS v1',16,0],
+                    ['Standards','CloudeSuite',16,0],
+                    ['Standards','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Standards','TPCx-HS',16,0],
+                    ['Standards','TPCx-V',16,0],
+                    ['Standards','TPC-DS v2',16,0],
+                    ['Standards','TPCx-BB',16,0],
+                    ['Standards','Graphalytics',16,0],
+
+                    ['MetaData','Semantic Publishing Benchmark (SPB)',16,0],
+
+                    ['Graph, Network','HiBench',16,0],
+                    ['Graph, Network','BigDataBench',16,0],
+                    ['Graph, Network','LinkBench',16,0],
+                    ['Graph, Network','BigFrame',16,0],
+                    ['Graph, Network','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Graph, Network','Social Network Benchmark',16,0],
+                    ['Graph, Network','SparkBench',16,0],
+                    ['Graph, Network','Graphalytics',16,0],
+                    ['Graph, Network','DeepBench',16,0],
+                    ['Graph, Network','DeepMark',16,0],
+                    ['Graph, Network','Hobbit Benchmark',16,0],
+
+                    ['Text, NLP, Web','Hadoop Workload Examples',16,0],
+                    ['Text, NLP, Web','HiBench',16,0],
+                    ['Text, NLP, Web','SWIM',16,0],
+                    ['Text, NLP, Web','PUMA Benchmark Suite',16,0],
+                    ['Text, NLP, Web','CloudeSuite',16,0],
+                    ['Text, NLP, Web','MRBS',16,0],
+                    ['Text, NLP, Web','BigBench',16,0],
+                    ['Text, NLP, Web','BigDataBench',16,0],
+                    ['Text, NLP, Web','BigFrame',16,0],
+                    ['Text, NLP, Web','PRIMEBALL',16,0],
+                    ['Text, NLP, Web','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Text, NLP, Web','Social Network Benchmark',16,0],
+                    ['Text, NLP, Web','TPCx-HS',16,0],
+                    ['Text, NLP, Web','SparkBench',16,0],
+                    ['Text, NLP, Web','BigFUN',16,0],
+                    ['Text, NLP, Web','TPCx-BB',16,0],
+                    ['Text, NLP, Web','Yahoo Streaming Benchmark (YSB)',16,0],
+                    ['Text, NLP, Web','DeepBench',16,0],
+                    ['Text, NLP, Web','DeepMark',16,0],
+                    ['Text, NLP, Web','StreamBench',16,0],
+                    ['Text, NLP, Web','RIoTBench',16,0],
+                    ['Text, NLP, Web','Hobbit Benchmark',16,0],
+
+                    ['Image, Audio','BigDataBench',16,0],
+                    ['Image, Audio','PRIMEBALL',16,0],
+                    ['Image, Audio','DeepBench',16,0],
+                    ['Image, Audio','DeepMark',16,0],
+
+
+                    ['Spatio Temp','BigDataBench',16,0],
+                    ['Spatio Temp','Hobbit Benchmark',16,0],
+
+                    ['Time Series, IoT','CloudeSuite',16,0],
+                    ['Time Series, IoT','MRBS',16,0],
+                    ['Time Series, IoT','BigDataBench',16,0],
+                    ['Time Series, IoT','PRIMEBALL',16,0],
+                    ['Time Series, IoT','Yahoo Streaming Benchmark (YSB)',16,0],
+                    ['Time Series, IoT','RIoTBench',16,0],
+                    ['Time Series, IoT','Hobbit Benchmark',16,0],
+
+                    ['Structured, BI','TPC-H',16,0],
+                    ['Structured, BI','TPC-DS v1',16,0],
+                    ['Structured, BI','Hadoop Workload Examples',16,0],
+                    ['Structured, BI','GridMix',16,0],
+                    ['Structured, BI','PigMix',16,0],
+                    ['Structured, BI','MRBench',16,0],
+                    ['Structured, BI','CALDA',16,0],
+                    ['Structured, BI','HiBench',16,0],
+                    ['Structured, BI','YCSB',16,0],
+                    ['Structured, BI','SWIM',16,0],
+                    ['Structured, BI','CloudRank-D',16,0],
+                    ['Structured, BI','PUMA Benchmark Suite',16,0],
+                    ['Structured, BI','CloudeSuite',16,0],
+                    ['Structured, BI','MRBS',16,0],
+                    ['Structured, BI','AMP Lab Big Data Benchmark',16,0],
+                    ['Structured, BI','BigBench',16,0],
+                    ['Structured, BI','BigDataBench',16,0],
+                    ['Structured, BI','LinkBench',16,0],
+                    ['Structured, BI','BigFrame',16,0],
+                    ['Structured, BI','PRIMEBALL',16,0],
+                    ['Structured, BI','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Structured, BI','Social Network Benchmark',16,0],
+                    ['Structured, BI','SparkBench',16,0],
+                    ['Structured, BI','TPCx-V',16,0],
+                    ['Structured, BI','BigFUN',16,0],
+                    ['Structured, BI','TPC-DS v2',16,0],
+                    ['Structured, BI','TPCx-BB',16,0],
+                    ['Structured, BI','Graphalytics',16,0],
+                    ['Structured, BI','Yahoo Streaming Benchmark (YSB)',16,0],
+                    ['Structured, BI','StreamBench',16,0],
+                    ['Structured, BI','RIoTBench',16,0],
+                    ['Structured, BI','Hobbit Benchmark',16,0],
+
+                    ['Visual Analytics','Hobbit Benchmark',16,0],
+
+                    ['Industrial Analytics (Descriptive, Diagnostic, Predictive, Prescriptive)','MRBS',16,0],
+                    ['Industrial Analytics (Descriptive, Diagnostic, Predictive, Prescriptive)','BigDataBench',16,0],
+                    ['Industrial Analytics (Descriptive, Diagnostic, Predictive, Prescriptive)','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Industrial Analytics (Descriptive, Diagnostic, Predictive, Prescriptive)','RIoTBench',16,0],
+
+                    ['Machine Learning, AI, Data Science','HiBench',16,0],
+                    ['Machine Learning, AI, Data Science','CloudRank-D',16,0],
+                    ['Machine Learning, AI, Data Science','MRBS',16,0],
+                    ['Machine Learning, AI, Data Science','BigBench',16,0],
+                    ['Machine Learning, AI, Data Science','BigDataBench',16,0],
+                    ['Machine Learning, AI, Data Science','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Machine Learning, AI, Data Science','SparkBench',16,0],
+                    ['Machine Learning, AI, Data Science','TPCx-BB',16,0],
+                    ['Machine Learning, AI, Data Science','DeepBench',16,0],
+                    ['Machine Learning, AI, Data Science','DeepMark',16,0],
+                    ['Machine Learning, AI, Data Science','RIoTBench',16,0],
+                    ['Machine Learning, AI, Data Science','Hobbit Benchmark',16,0],
+
+                    ['Streaming/ Realtime Processing','HiBench',16,0],
+                    ['Streaming/ Realtime Processing','CloudRank-D',16,0],
+                    ['Streaming/ Realtime Processing','BigDataBench',16,0],
+                    ['Streaming/ Realtime Processing','SparkBench',16,0],
+                    ['Streaming/ Realtime Processing','Yahoo Streaming Benchmark (YSB)',16,0],
+                    ['Streaming/ Realtime Processing','StreamBench',16,0],
+                    ['Streaming/ Realtime Processing','RIoTBench',16,0],
+
+                    ['Interactive Processing','TPC-H',16,0],
+                    ['Interactive Processing','TPC-DS v1',16,0],
+                    ['Interactive Processing','YCSB',16,0],
+                    ['Interactive Processing','MRBS',16,0],
+                    ['Interactive Processing','AMP Lab Big Data Benchmark',16,0],
+                    ['Interactive Processing','BigBench',16,0],
+                    ['Interactive Processing','BigDataBench',16,0],
+                    ['Interactive Processing','LinkBench',16,0],
+                    ['Interactive Processing','BigFrame',16,0],
+                    ['Interactive Processing','PRIMEBALL',16,0],
+                    ['Interactive Processing','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Interactive Processing','Social Network Benchmark',16,0],
+                    ['Interactive Processing','SparkBench',16,0],
+                    ['Interactive Processing','TPCx-V',16,0],
+                    ['Interactive Processing','BigFUN',16,0],
+                    ['Interactive Processing','TPC-DS v2',16,0],
+                    ['Interactive Processing','TPCx-BB',16,0],
+                    ['Interactive Processing','Graphalytics',16,0],
+                    ['Interactive Processing','Yahoo Streaming Benchmark (YSB)',16,0],
+                    ['Interactive Processing','DeepBench',16,0],
+                    ['Interactive Processing','DeepMark',16,0],
+                    ['Interactive Processing','RIoTBench',16,0],
+                    ['Interactive Processing','Hobbit Benchmark',16,0],
+
+                    ['Batch Processing','TPC-H',16,0],
+                    ['Batch Processing','TPC-DS v1',16,0],
+                    ['Batch Processing','Hadoop Workload Examples',16,0],
+                    ['Batch Processing','GridMix',16,0],
+                    ['Batch Processing','PigMix',16,0],
+                    ['Batch Processing','MRBench',16,0],
+                    ['Batch Processing','CALDA',16,0],
+                    ['Batch Processing','HiBench',16,0],
+                    ['Batch Processing','SWIM',16,0],
+                    ['Batch Processing','CloudRank-D',16,0],
+                    ['Batch Processing','PUMA Benchmark Suite',16,0],
+                    ['Batch Processing','MRBS',16,0],
+                    ['Batch Processing','AMP Lab Big Data Benchmark',16,10],
+                    ['Batch Processing','BigBench',16,0],
+                    ['Batch Processing','BigDataBench',16,0],
+                    ['Batch Processing','LinkBench',16,0],
+                    ['Batch Processing','BigFrame',16,0],
+                    ['Batch Processing','PRIMEBALL',16,0],
+                    ['Batch Processing','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Batch Processing','Social Network Benchmark',16,0],
+                    ['Batch Processing','SparkBench',16,0],
+                    ['Batch Processing','TPCx-V',16,0],
+                    ['Batch Processing','BigFUN',16,0],
+                    ['Batch Processing','TPC-DS v2',16,0],
+                    ['Batch Processing','TPCx-BB',16,0],
+                    ['Batch Processing','Graphalytics',16,0],
+                    ['Batch Processing','Hobbit Benchmark',16,0],
+                    ['Batch Processing','TPCx-HS',16,0],
+                    ['Batch Processing','DeepBench',16,0],
+                    ['Batch Processing','DeepMark',16,0],
+
+
+
+                    ['Data Governance/Mgmt','BigDataBench',16,0],
+
+                    ['Data Storage','TPC-H',16,0],
+                    ['Data Storage','TPC-DS v1',16,0],
+                    ['Data Storage','Hadoop Workload Examples',16,0],
+                    ['Data Storage','GridMix',16,0],
+                    ['Data Storage','PigMix',16,0],
+                    ['Data Storage','MRBench',16,0],
+                    ['Data Storage','CALDA',16,0],
+                    ['Data Storage','HiBench',16,0],
+                    ['Data Storage','YCSB',16,0],
+                    ['Data Storage','CloudRank-D',16,0],
+                    ['Data Storage','PUMA Benchmark Suite',16,0],
+                    ['Data Storage','CloudeSuite',16,0],
+                    ['Data Storage','MRBS',16,0],
+                    ['Data Storage','AMP Lab Big Data Benchmark',16,0],
+                    ['Data Storage','BigBench',16,0],
+                    ['Data Storage','BigDataBench',16,0],
+                    ['Data Storage','LinkBench',16,0],
+                    ['Data Storage','BigFrame',16,0],
+                    ['Data Storage','PRIMEBALL',16,0],
+                    ['Data Storage','Semantic Publishing Benchmark (SPB)',16,0],
+                    ['Data Storage','Social Network Benchmark',16,0],
+                    ['Data Storage','SparkBench',16,0],
+                    ['Data Storage','TPCx-V',16,0],
+                    ['Data Storage','BigFUN',16,0],
+                    ['Data Storage','TPC-DS v2',16,0],
+                    ['Data Storage','TPCx-BB',16,0],
+                    ['Data Storage','Graphalytics',16,0],
+                    ['Data Storage','StreamBench',16,0],
+                    ['Data Storage','RIoTBench',16,0],
+                    ['Data Storage','Hobbit Benchmark',16,0],
+                    ['Data Storage','TPCx-HS',16,0],
+
+
+
+                    ['Communication & Connectivity','Hadoop Workload Examples',16,0],
+                    ['Communication & Connectivity','TPCx-HS',16,0],
+
+
+
+
+                    ['Cloud Services & HPC, Edge','CloudRank-D',16,0],
+                    ['Cloud Services & HPC, Edge','CloudeSuite',16,0],
+                    ['Cloud Services & HPC, Edge','AMP Lab Big Data Benchmark',16,0],
+                    ['Cloud Services & HPC, Edge','BigDataBench',16,0],
+                    ['Cloud Services & HPC, Edge','PRIMEBALL',16,0],
+                    ['Cloud Services & HPC, Edge','TPCx-V',16,0]];
+
+
+                /**
+                 * set colors for targets
+                 */
+                var color ={
+                    'Standards':"#3366CC",
+                    'MetaData':"#DC3912",
+                    'Graph, Network':"#FF9900",
+                    'Text, NLP, Web':"#109618",
+                    'Image, Audio':"#990099",
+                    'Spatio Temp':"#0099C6",
+                    'Time Series, IoT':"#4286f4",
+                    'Structured, BI':"#6eb74e",
+                    'Visual Analytics':"#771d6b",
+                    'Industrial Analytics (Descriptive, Diagnostic, Predictive, Prescriptive)':"#c1135e",
+                    'Machine Learning, AI, Data Science':"#24afa2",
+                    'Streaming/ Realtime Processing':"#af9d24",
+                    'Interactive Processing':"#2473af",
+                    'Batch Processing':"#ffc6f8",
+                    'Data Storage':"#ff0015",
+                    'Communication & Connectivity':"#877475",
+                    'Cloud Services & HPC, Edge':"#ffcb30"};
+
+
+                var svg = d3.select("#grafik").append("svg").attr("width", 1100).attr("height", 800);
+                var g = svg.append("g").attr("transform","translate(330,50)");
+
+
+                var bp=viz.bP()
+                                .data(data)
+                                .min(12)
+                                .pad(1)
+                                .height(600)
+                                .width(500)
+                                .barSize(35)
+                                .fill(d=>{
+                            return color[d.primary]
+                        });
+
+                g.call(bp);
+
+                g.selectAll(".mainBars")
+                        .on("mouseover",mouseover)
+                        .on("mouseout",mouseout)
+                        .on("click",mouseclick);
+
+                // appending text based on d key
+                g.selectAll(".mainBars").append("text").attr("class","label")
+                        .attr("x",d=>(d.part=="primary"? -30: 30))
+                .attr("y",d=>+6)
+                .text(d=> {
+
+                    return d.key}
+                )
+                .attr("text-anchor",d=>(d.part=="primary"? "end": "start"));
+
+
+                function mouseover(d){
+                    d3.select(this).style("cursor", "pointer");
+                    bp.mouseover(d);
+                }
+                function mouseout(d){
+                    d3.select(this).style("cursor", "default");
+                    bp.mouseout(d);
+
+                }
+
+                /**
+                 * what if label is clicked?
+                 * @param d ---> d is an array from data object
+                 */
+                function mouseclick(d){
+                    window.open("https://github.com/t-ivanov/HadoopExamples", '_blank');
+
+                }
+
+                d3.select(self.frameElement).style("height", "800px");
+
+            </script>
+
+
+  </body>
+</html>

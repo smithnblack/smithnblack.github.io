@@ -3,12 +3,18 @@
     font-weight: bold;
 }
 circle {
-    stroke: #565352;
+    stroke: #565152;
     stroke-width: 1;
     fill: #561352;
 }
 .container {
   float: left;
+}
+
+.container-toolbar {
+    float: right;
+    text-align:center;
+    margin: 13px 12px 12px 10px;;
 }
 .scrollup {
     width: 40px;
@@ -18,7 +24,6 @@ circle {
     right: 100px;
     display: none;
     text-indent: -9999px;
-    /*background: url('icon_top.png') no-repeat;*/
     background-color: #000;
 }
 
@@ -30,7 +35,7 @@ circle {
 }
 
 .bar {
-  fill: orange;
+  fill: lightblue;
 }
 
 .bar:hover {
@@ -45,7 +50,7 @@ circle {
   line-height: 1;
   font-weight: bold;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
+  /*background: rgba(0, 0, 0, 0.8);*/
   color: #fff;
   border-radius: 2px;
 }
@@ -68,4 +73,13 @@ circle {
   margin: -1px 0 0 0;
   top: 100%;
   left: 0;
+}
+
+#dropdownB {
+    margin-right : 360px;
+    /*position: absolute;*/
+}
+
+#dropdownB button {
+    width: 100px;
 }

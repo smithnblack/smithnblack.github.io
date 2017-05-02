@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hardware & Platform</title>
+    <title>IBD Portal | Bench Type</title>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
@@ -33,54 +33,46 @@
   <body>
       <!-- Statische Navbar -->
       <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Navigation ein-/ausblenden</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand logoText" href="./index.html">Benchmark Library</a>
+          <div class="container">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                      <span class="sr-only">Navigation ein-/ausblenden</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand logoText"  href="./index.html">Benchmarking Portal</a>
+              </div>
+              <div id="navbar" class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav">
+                      <li><a href="./overview.html">Overview</a></li>
+
+                      <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmarks <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                              <li><a href="./bench_type.html">Benchmark Type</a></li>
+                              <li><a href="data_time.html">Datasize vs. Time</a></li>
+                              <li><a href="data_cost.html">Datasize vs. Cost</a></li>
+                              <li><a href="./nodes_time.html">Data Nodes vs. VM RAM vs. Time</a></li>
+
+                              <li role="separator" class="divider"></li>
+                              <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
+                              <li><a href="./compare.html">Compare</a></li>
+                              <li><a href="./hadoop.html">Hadoop Version</a></li>
+                              <li><a href="./custom.html">Custom</a></li>
+
+                          </ul>
+                      </li>
+                      <li><a href="./import.html">Import</a></li>
+                  </ul>
+
+                  <ul class="nav navbar-nav navbar-right">
+                      <li><a href="./about.html">About us</a></li>
+                      <li><a href="../navbar/">Contact</a></li>
+                  </ul>
+              </div><!--/.nav-collapse -->
           </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Start</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmarks <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  <li><a href="./hardware_platform.html">Hardware & Platform</a></li>
-                  <li><a href="./exectime.html">Execution Time</a></li>
-                  <li role="separator" class="divider"></li>
-                  <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
-                  <li><a href="#">Data Size</a></li>
-                  <li><a href="#">Price</a></li>
-                </ul>
-              </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="../navbar/">About us</a></li>
-              <li><a href="../navbar/">Contact</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
       </nav>
-
-      <div class="container">
-
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Benchmark Type <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">TPCH</a></li>
-              <li><a href="#">Teragen</a></li>
-              <li role="separator" class="divider"></li>
-              <!-- <li class="dropdown-header">Nav-Überschrift</li> -->
-              <li><a href="#">Datagen</a></li>
-              <li><a href="#">join</a></li>
-            </ul>
-          </li>
-      </div>
-
 
 
       <div class="container" id=grafik></div>
@@ -89,7 +81,7 @@
 
 
             <script>
-      // var query = "SHOW TAG VALUES FROM dataCoresTag WITH KEY = vm_core"
+
             var query = "SELECT DISTINCT bench FROM data"
             fetch("http://localhost:8086/query?pretty=true&db=test&q="+query, {
                        method: 'GET',
@@ -99,15 +91,134 @@
                          response.json().then(function(data) {
 
 
-            var clickedNodes= [];
+            var clickedNodes = [];
+
             var width = 960,
              height = 500,
              padding = 1.5, // separation between same-color nodes
              clusterPadding = 6, // separation between different-color nodes
              maxRadius = 12;
 
-             var color = d3.scale.ordinal()
-                .range(["#7A99AC", "#E4002B"]);
+                             var benchInfos = {
+                                 "tpch_query1":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query2":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query4":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query5":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query6":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query7":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query8":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query9":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query10":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query11":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query12":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query13":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query14":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query15":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query16":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query17":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query18":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query19":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query20":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query21":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query22":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query1_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query2_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query3_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query4_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query5_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query6_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query7_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query8_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query9_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query10_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query11_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query12_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query13_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query14_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query15_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query16_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query17_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query18_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query19_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query20_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query21_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+                                 "tpch_query22_c3":
+                                         "TPC-H is the de facto benchmark standard for testing data warehouse capability of a system. Instead of representing the activity of any particular business  segment,  TPC-H  models  any  industry  that  manages,  sells,  or  distributes products  worldwide  (e.g.,  car  rental,  food  distribution,  parts,  suppliers,  etc.). The benchmark is technology-agnostic.",
+
+                                 "sort":
+                                         "This workload sorts its text input data, which is generated using RandomTextWriter.",
+                                 "wordcount":
+                                         "This workload counts the occurrence of each word in the input data, which are generated using RandomTextWriter. It is representative of another typical class of real world MapReduce jobs - extracting a small amount of interesting data from large data set.",
+                                 "terasort":
+                                         "TeraSort is a standard benchmark created by Jim Gray. Its input data is generated by Hadoop TeraGen example program.",
+                                 "uservisits_copy":
+                                         "This workload benchmarks PageRank algorithm implemented in Spark-MLLib/Hadoop (a search engine ranking benchmark included in pegasus 2.0) examples. The data source is generated from Web data whose hyperlinks follow the Zipfian distribution.",
+                                 "join":
+                                         "These workloads are developed based on SIGMOD 09 paper -A Comparison of Approaches to Large-Scale Data Analysis- and HIVE-396. It contains Hive queries (Aggregation and Join) performing the typical OLAP queries described in the paper. Its input is also automatically generated Web data with hyperlinks following the Zipfian distribution.",
+                                 "prepare_aggregation":
+                                         "These workloads are developed based on SIGMOD 09 paper -A Comparison of Approaches to Large-Scale Data Analysis- and HIVE-396. It contains Hive queries (Aggregation and Join) performing the typical OLAP queries described in the paper. Its input is also automatically generated Web data with hyperlinks following the Zipfian distribution.",
+                                 "scan":
+                                         "These workloads are developed based on SIGMOD 09 paper -A Comparison of Approaches to Large-Scale Data Analysis- and HIVE-396. It contains Hive queries (Aggregation and Join) performing the typical OLAP queries described in the paper. Its input is also automatically generated Web data with hyperlinks following the Zipfian distribution.",
+                                 "grep":
+                                         "A map/reduce program that counts the matches of a regex in the input.",
+                                 "prepare_join":
+                                         " A job that effects a join over sorted, equally partitioned datasets.",
+                                 "dfsio_read":
+                                         "TestDFSIO is a HDFS benchmark included in Hadoop distributions. It is designed to stress test the storage I/O (read and write) capabilities of a cluster. In this way performance bottlenecks in network, hardware, OS and Hadoop setup can be found and fixed. The benchmark consists of two parts: TestDFSIO-write and TestDFSIO-read. The write program starts multiple map tasks with each task writing a separate HDFS file. The read program starts multiple map tasks with each task sequentially reading the previously written HDFS files and measuring the file size and the task execution time. The benchmark uses a single reduce task to measure and compute two performance metrics for each map task: Average I/O Rate and Throughput. Respectively, Equation 1 and Equation 2 illustrate how the two metrics are calculated with N as the total number of map tasks and the index i (0< i < N), identifying the individual tasks.",
+                                 "dfsio_write":
+                                         "TestDFSIO is a HDFS benchmark included in Hadoop distributions. It is designed to stress test the storage I/O (read and write) capabilities of a cluster. In this way performance bottlenecks in network, hardware, OS and Hadoop setup can be found and fixed. The benchmark consists of two parts: TestDFSIO-write and TestDFSIO-read. The write program starts multiple map tasks with each task writing a separate HDFS file. The read program starts multiple map tasks with each task sequentially reading the previously written HDFS files and measuring the file size and the task execution time. The benchmark uses a single reduce task to measure and compute two performance metrics for each map task: Average I/O Rate and Throughput. Respectively, Equation 1 and Equation 2 illustrate how the two metrics are calculated with N as the total number of map tasks and the index i (0< i < N), identifying the individual tasks.",
+                                 "randomtextwriter":
+                                         "A map/reduce program that writes 10GB of random textual data per node.",
+                                 "teravalidate":
+                                         "Checking results of terasort."
+
+
+                             };
+
 
 
 
@@ -151,10 +262,11 @@
              })
              .style("opacity", 0.2)
              .attr("r", function(d){return d.radius})
-             .attr("id",function(d){return "data"+d.id})
+             .attr("id", function (d) {
+                     return "data" + d.id
+                 })
              .on("mouseover", handleMouseOver)
-             .on("mouseout", handleMouseOut)
-             .on("click",clickFunction);
+             .on("mouseout", handleMouseOut);
 
          node.append("text")
                .attr("dy", ".3em")
@@ -163,24 +275,32 @@
                .style("text-anchor", "middle")
                .text(function(d) { return d.text.replace("_"," "); });
 
+             /**
+              * creating nodes for visualization
+              * @param data
+              * @param node_counter
+              * @returns {{cluster: number, radius: number, text: *, x: number, y: number, id: number}}
+              */
+             function create_nodes(data,node_counter) {
 
+               var i = cs.indexOf(data[node_counter].group),
+                   r = Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius,
+                   d = {
+                     cluster: i,
+                     radius: 25,
+                     text: data[node_counter][1],
+                     x: Math.cos(i / m * 2 * Math.PI) * 200 + width / 2 + Math.random(),
+                     y: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random(),
+                       id: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random()
+                   };
+               if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
+               return d;
+             };
 
-
-         function create_nodes(data,node_counter) {
-            //  console.log(data[node_counter][1])
-           var i = cs.indexOf(data[node_counter].group),
-               r = Math.sqrt((i + 1) / m * -Math.log(Math.random())) * maxRadius,
-               d = {
-                 cluster: i,
-                 radius: 25,
-                 text: data[node_counter][1],
-                 x: Math.cos(i / m * 2 * Math.PI) * 200 + width / 2 + Math.random(),
-                 y: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random(),
-                 id: Math.sin(i / m * 2 * Math.PI) * 200 + height / 2 + Math.random()
-               };
-           if (!clusters[i] || (r > clusters[i].radius)) clusters[i] = d;
-           return d;
-         };
+         // add the tooltip area to the webpage
+         var tooltip = d3.select("#grafik").append("div")
+                 .attr("class", "tooltip")
+                 .style("opacity", 0);
 
 
 
@@ -255,6 +375,23 @@
            d3.select(this).attr({
              r: 20 * 2
            });
+
+             tooltip.transition()
+                     .duration(200)
+                     .style("opacity", .9);
+             tooltip.html("<strong>Explanation:</strong> "+benchInfos[d.text])
+                     .style("background-color", "white")
+                     .style("color", "black")
+                     .style("text-align", "center")
+                     .style("padding","5px 0")
+                     .style("border-radius","6px")
+                     //                        .style("left", (d3.event.pageX + 300) + "px")
+                     //                        .style("top", (d3.event.pageY - 28) + "px");
+                     .style("left",width-145+"px")
+                     .style("top",100+"px")
+                     .style("width",250+"px")
+
+                     .style("text-align","justify");
        }
 
        function handleMouseOut(d, i) {  // Add interactivity
@@ -263,211 +400,17 @@
          d3.select(this).attr({
            r: 25
          });
-        }
-        //on click call other viz
-        function clickFunction(d,i){
-            // d3.selectAll('#grafik-2ndlvl').remove();
 
-            if (clickedNodes.includes(d)) {
+           tooltip.transition()
+                   .duration(500)
+                   .style("opacity", 0);
 
-                // change back the style
-                document.getElementById("data"+d.id).style.fill = "#337ab7";
-                document.getElementById("data"+d.id).style.opacity = 0.2;
-                //TODO
-                // console.log(d3.select("#grafik-2ndlvl").remove("#grafik-2ndlvl"+d.id));
-                // remove it from the clickedNodes array
-                clickedNodes.pop(d);
-                console.log("remove",clickedNodes)
-
-
-            } else {
-                // first time clicked?
-                clickedNodes.push(d);
-                console.log("insert",clickedNodes)
-                d3.select(this).attr({
-                  style:"fill: grey"
-              });
-            }
+       }
 
 
 
-            var query2 = "select exe_time,datasize,scale_factor,description,cost_hour,id_exec from data where bench='"+d.text+"'"
-            fetch("http://localhost:8086/query?pretty=true&db=test&q="+query2, {
-                       method: 'GET',
 
-                     }).then(function(response) {
-                         response.json().then(function(data) {
-
-
-
-                             var margin = {top: 20, right: 40, bottom: 30, left: 60},
-                                width = 960 - margin.left - margin.right,
-                                height = 500 - margin.top - margin.bottom;
-                            /*
-                             * value accessor - returns the value to encode for a given data object.
-                             * scale - maps value to a visual display encoding, such as a pixel position.
-                             * map function - maps from data value to display value
-                             * axis - sets up axis
-                             */
-                            //  var data = data.results[0].series[0].values;
-                            //  console.log("first run",data.results[0].series[0].values);
-                            var dataRe =data.results[0].series[0].values;
-                             var nodes = [];
-                             var x = dataRe.length;
-
-                             for (var i = 0; i<x; i++){
-                                 nodes.push(create_nodes(dataRe,i));
-                             }
-
-                            // setup x
-                            var xValue = function(d) { return d.datasize/1000000;}, // data -> value
-                                xScale = d3.scale.linear().range([0, width]), // value -> display
-                                xMap = function(d) { return xScale(d.datasize/1000000);}, // // data -> display
-                                xAxis = d3.svg.axis().scale(xScale).orient("bottom");
-
-                            // setup y
-                            var yValue = function(d) { return d.exe_time;}, // data -> value
-                                yScale = d3.scale.linear().range([height, 0]), // value -> display
-                                yMap = function(d) { return yScale(d.exe_time);}, // data -> display
-                                yAxis = d3.svg.axis().scale(yScale).orient("left");
-
-
-                            // setup fill color
-                            var cValue = function(d) { return d.cost;},
-                                color = d3.scale.category10();
-
-                            // add the graph canvas to the body of the webpage
-                            var svg = d3.select("#grafik-2ndlvl").append("svg")
-                                .attr("width", width + margin.left + margin.right)
-                                .attr("height", height + margin.top + margin.bottom)
-                                .attr("id",function(){
-                                    console.log(d);
-                                    return "2ndlvl"+d.id;
-                                })
-                              .append("g")
-                                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-                            // add the tooltip area to the webpage
-                            var tooltip = d3.select("#grafik-2ndlvl").append("div")
-                                .attr("class", "tooltip")
-                                .style("opacity", 0);
-
-                            // load data
-
-                              // change string (from CSV) into number format
-                              nodes.forEach(function(d) {
-                                d.exe_time = +d.exe_time;
-                                d.datasize = +d.datasize;
-                            //    console.log(d);
-                              });
-
-                              // don't want dots overlapping axis, so add in buffer to data domain
-                              xScale.domain([d3.min(nodes, xValue)-1, d3.max(nodes, xValue)+1]);
-                              yScale.domain([d3.min(nodes, yValue)-1, d3.max(nodes, yValue)+1]);
-
-                              // x-axis
-                              svg.append("g")
-                                  .attr("class", "x axis")
-                                  .attr("transform", "translate(0," + height + ")")
-                                  .call(xAxis)
-                                .append("text")
-                                  .attr("class", "label")
-                                  .attr("x", width)
-                                  .attr("y", -6)
-                                  .style("text-anchor", "end")
-                                  .text("Data Size");
-
-                              // y-axis
-                              svg.append("g")
-                                  .attr("class", "y axis")
-                                  .call(yAxis)
-                                .append("text")
-                                  .attr("class", "label")
-                                  .attr("transform", "rotate(-90)")
-                                  .attr("y", 6)
-                                  .attr("dy", ".71em")
-                                  .style("text-anchor", "end")
-                                  .text("Execution Time (ms)");
-
-                              // draw dots
-                              svg.selectAll(".dot")
-                                  .data(nodes)
-                                .enter().append("circle")
-                                  .attr("class", "dot")
-                                  .attr("r", 3.5)
-                                  .attr("cx", xMap)
-                                  .attr("cy", yMap)
-                                  .attr("id","data"+d.id_exec)
-                                  .style("fill", function(d) { return color(cValue(d));})
-                                  .on("mouseover", function(d) {
-                                      tooltip.transition()
-                                           .duration(200)
-                                           .style("opacity", .9);
-                                      tooltip.html(d.description + "  "+ d.id_exec +"<br/> (" + xValue(d)
-                            	        + ", " + yValue(d) + "ms)")
-                                           .style("left", (d3.event.pageX + 5) + "px")
-                                           .style("top", (d3.event.pageY - 28) + "px");
-                                  })
-                                  .on("mouseout", function(d) {
-                                      tooltip.transition()
-                                           .duration(500)
-                                           .style("opacity", 0);
-                                  });
-
-
-                                  // disk mit exec_time (bar charAt) + cost_disk
-                                  // datanodes mit exec_time (bar chart)
-
-                              // draw legend
-                              var legend = svg.selectAll(".legend")
-                                  .data(color.domain())
-                                .enter().append("g")
-                                  .attr("class", "legend")
-                                  .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-                              // draw legend colored rectangles
-                              legend.append("rect")
-                                  .attr("x", width - 18)
-                                  .attr("width", 18)
-                                  .attr("height", 18)
-                                  .style("fill", color);
-
-                            //   draw legend text
-                              legend.append("text")
-                                  .attr("x", width - 24)
-                                  .attr("y", 9)
-                                  .attr("dy", ".35em")
-                                  .style("text-anchor", "end")
-                                  .text(function(d) { return d;})
-
-
-                            function create_nodes(data,node_counter) {
-
-
-                                    var d = {
-                                       exe_time: data[node_counter][1],
-                                       datasize: data[node_counter][2],
-                                       scale: data[node_counter][3],
-                                       description: data[node_counter][4],
-                                       cost: data[node_counter][5],
-                                       id_exec:data[node_counter][6]
-                                   }
-                                 return d;
-
-                            };
-
-                            // pageScroll();
-                            // console.log("click data",data)
-
-
-                         }).catch(function(err) {
-                              console.log("JSON Object not able to be fetched from InfluxDB",err)
-                  })
-              }
-    )}
-
-
-                                                  })
+      })
 
 
                      }).catch(function(err) {
