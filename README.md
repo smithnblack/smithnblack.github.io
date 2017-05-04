@@ -1,4 +1,4 @@
-# smithnblack.github.io
+# Interactive Big Data Benchmarking Portal
 
 InfluxDB v1.0.2 Installation, avaliable online, requires root privileges on the host machine.
 
